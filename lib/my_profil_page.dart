@@ -15,6 +15,8 @@ class ProfilPageState extends State<ProfilPage> {
   late TextEditingController name;
   late TextEditingController secret;
 
+  bool showSecret = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -63,7 +65,12 @@ class ProfilPageState extends State<ProfilPage> {
                   Text("Taille: ${myProfil.setHeight()}"),
                   Text("Genre: ${myProfil.setGenderString()}"),
                   Text("Hobbies: ${myProfil.setHobbies()}"),
-                  Text("Langage de programmation favori: ${myProfil.favoriteLang}")
+                  Text("Langage de programmation favori: ${myProfil.favoriteLang}"),
+                  ElevatedButton(
+                      onPressed: updateSecret,
+                      child: Text((showSecret) ? "Cacher secret" : "Montrer secret"),
+                  ),
+                  (showSecret) ? Text(myProfil.secret) : Container(height: 0, width: 0,),
                 ],
               )),
             ),
@@ -86,9 +93,6 @@ class ProfilPageState extends State<ProfilPage> {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(40),
-        ),
         hintText: hint,
       ),
       obscureText: isSecret,
@@ -108,4 +112,9 @@ class ProfilPageState extends State<ProfilPage> {
     });
   }
 
+  updateSecret(){
+    setState(() {
+      showSecret = !showSecret;
+    });
+  }
 }
