@@ -83,6 +83,18 @@ class ProfilPageState extends State<ProfilPage> {
             myTextField(controller: surname, hint: "Entrez votre prénom"),
             myTextField(controller: name, hint: "Entrez votre nom"),
             myTextField(controller: secret, hint: "Dites nous un secret", isSecret: true),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Genre: ${myProfil.setGenderString()}"),
+                Switch(value: myProfil.gender, onChanged: ((newBool) {
+                  setState(() {
+                    myProfil.gender = newBool;
+                  });
+                }))
+              ],
+            ),
           ],
         ),
       ),
