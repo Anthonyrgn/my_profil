@@ -40,7 +40,6 @@ class Profil {
     if(hobbies.length == 0){
       return toHobbiesString;
     } else {
-      toHobbiesString = "Mes hobbies sont:";
       hobbies.forEach((hobbie) {
         toHobbiesString += " $hobbie";
       });

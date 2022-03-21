@@ -14,6 +14,7 @@ class ProfilPageState extends State<ProfilPage> {
   late TextEditingController surname;
   late TextEditingController name;
   late TextEditingController secret;
+  late TextEditingController age;
 
   bool showSecret = false;
 
@@ -33,6 +34,7 @@ class ProfilPageState extends State<ProfilPage> {
     surname = TextEditingController();
     name = TextEditingController();
     secret = TextEditingController();
+    age = TextEditingController();
   }
 
   @override
@@ -45,6 +47,7 @@ class ProfilPageState extends State<ProfilPage> {
     surname.text = myProfil.surname;
     name.text = myProfil.name;
     secret.text = myProfil.secret;
+    age.text = myProfil.age.toString();
   } //Tout ce que l'on va faire quand le widget sera dispose. Quand le Widget sera supprimé
 
   @override
@@ -83,11 +86,7 @@ class ProfilPageState extends State<ProfilPage> {
               )),
             ),
             const Divider(color: Colors.deepOrangeAccent, thickness: 2,),
-            const Text("Modifier les infos", style: TextStyle(
-              color: Colors.deepPurple,
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-            ),),
+            myTitle("Modifier les infos"),
             myTextField(controller: surname, hint: "Entrez votre prénom"),
             myTextField(controller: name, hint: "Entrez votre nom"),
             myTextField(controller: secret, hint: "Dites nous un secret", isSecret: true),
@@ -117,6 +116,8 @@ class ProfilPageState extends State<ProfilPage> {
             ),
             Divider(color: Colors.deepPurple, thickness: 2,),
             myHobbies(),
+            Divider(color: Colors.deepPurple, thickness: 2,),
+            myRadios(),
           ],
         ),
       ),
@@ -142,6 +143,11 @@ class ProfilPageState extends State<ProfilPage> {
         surname: (surname.text != myProfil.name) ? surname.text : myProfil.surname, // recupere le text dans la TextField
         name: (name.text != myProfil.name) ? name.text : myProfil.name,
         secret: secret.text,
+        favoriteLang: myProfil.favoriteLang,
+        hobbies: myProfil.hobbies,
+        height: myProfil.height,
+        age: myProfil.age,
+        gender: myProfil.gender,
       );
     });
   }
@@ -153,7 +159,7 @@ class ProfilPageState extends State<ProfilPage> {
   }
 
   Column myHobbies(){
-    List<Widget> widgets = [];
+    List<Widget> widgets = [myTitle("Mes hobbies")];
     hobbies.forEach((hobby, like) {
       Row r = Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -177,5 +183,38 @@ class ProfilPageState extends State<ProfilPage> {
       widgets.add(r);
     });
     return Column(children: widgets,);
+  }
+
+  Row myRadios(){
+    List<Widget> w = [myTitle("Langage préféré")];
+    List<String> langs = ["Dart", "Swift", "Kotlin", "Java", "Python"];
+    int index = langs.indexWhere((lang) => lang.startsWith(myProfil.favoriteLang));
+    for (var x = 0; x < langs.length; x++){
+      Column c = Column(
+        children: [
+          Text(langs[x]),
+          Radio(value: x, groupValue: index, onChanged: ((newValue) {
+            setState(() {
+              myProfil.favoriteLang = langs[newValue as int];
+            });
+          }))
+        ],
+      );
+      w.add(c);
+    }
+    return Row(
+      children: w,
+    );
+  }
+
+  Text myTitle(String text){
+    return Text(
+      text,
+      style: const TextStyle(
+        color: Colors.deepPurple,
+        fontWeight: FontWeight.bold,
+        fontSize: 18
+      ),
+    );
   }
 }
