@@ -17,6 +17,14 @@ class ProfilPageState extends State<ProfilPage> {
 
   bool showSecret = false;
 
+  Map<String, bool> hobbies = {
+    "Pétanque": false,
+    "Football": false,
+    "Rugby": false,
+    "Code": false,
+    "Manga": false
+  };
+
   @override
   void initState() {
     // TODO: implement initState
@@ -106,7 +114,9 @@ class ProfilPageState extends State<ProfilPage> {
                   });
                 }))
               ],
-            )
+            ),
+            Divider(color: Colors.deepPurple, thickness: 2,),
+            myHobbies(),
           ],
         ),
       ),
@@ -140,5 +150,32 @@ class ProfilPageState extends State<ProfilPage> {
     setState(() {
       showSecret = !showSecret;
     });
+  }
+
+  Column myHobbies(){
+    List<Widget> widgets = [];
+    hobbies.forEach((hobby, like) {
+      Row r = Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Text(hobby),
+          Checkbox(value: like, onChanged: ((newBool) {
+            setState(() {
+              hobbies[hobby] = newBool ?? false;
+              List<String> str = [];
+              hobbies.forEach((key, value) {
+                if(value == true){
+                  str.add(key + ",");
+                }
+              });
+              myProfil.hobbies = str;
+            });
+          }))
+        ],
+      );
+      widgets.add(r);
+    });
+    return Column(children: widgets,);
   }
 }
