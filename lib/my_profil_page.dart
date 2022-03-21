@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:my_profil/profil.dart';
 
@@ -10,18 +11,30 @@ class ProfilPage extends StatefulWidget {
 
 class ProfilPageState extends State<ProfilPage> {
   Profil myProfil = Profil(surname: "Anthony", name: "Ringeisen");
+  late TextEditingController surname;
+  late TextEditingController name;
+  late TextEditingController secret;
 
   @override
   void initState() {
     // TODO: implement initState
     super
         .initState(); // Tout ce que l'on va faire pendant l'initialisation du Widget
+    surname = TextEditingController();
+    name = TextEditingController();
+    secret = TextEditingController();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    surname.dispose();
+    name.dispose();
+    secret.dispose();
+    surname.text = myProfil.surname;
+    name.text = myProfil.name;
+    secret.text = myProfil.secret;
   } //Tout ce que l'on va faire quand le widget sera dispose. Quand le Widget sera supprimé
 
   @override
@@ -54,10 +67,45 @@ class ProfilPageState extends State<ProfilPage> {
                 ],
               )),
             ),
-            Divider(color: Colors.deepOrangeAccent, thickness: 2,)
+            const Divider(color: Colors.deepOrangeAccent, thickness: 2,),
+            const Text("Modifier les infos", style: TextStyle(
+              color: Colors.deepPurple,
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+            ),),
+            myTextField(controller: surname, hint: "Entrez votre prénom"),
+            myTextField(controller: name, hint: "Entrez votre nom"),
+            myTextField(controller: secret, hint: "Dites nous un secret", isSecret: true),
           ],
         ),
       ),
     );
   }
+
+  TextField myTextField({ required TextEditingController controller, required String hint, bool isSecret = false}){
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(40),
+        ),
+        hintText: hint,
+      ),
+      obscureText: isSecret,
+      onSubmitted: ((newValue) {
+        updateUser();
+      }),
+    );
+  }
+
+  updateUser(){
+    setState(() {
+      myProfil = Profil(
+        surname: (surname.text != myProfil.name) ? surname.text : myProfil.surname, // recupere le text dans la TextField
+        name: (name.text != myProfil.name) ? name.text : myProfil.name,
+        secret: secret.text,
+      );
+    });
+  }
+
 }
