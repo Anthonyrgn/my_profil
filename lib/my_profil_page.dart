@@ -89,7 +89,8 @@ class ProfilPageState extends State<ProfilPage> {
             myTitle("Modifier les infos"),
             myTextField(controller: surname, hint: "Entrez votre prénom"),
             myTextField(controller: name, hint: "Entrez votre nom"),
-            myTextField(controller: secret, hint: "Dites nous un secret", isSecret: true),
+            myTextField(controller: secret, hint: "Dites nous un secret", isSecret: true,),
+            myTextField(controller: age, hint: "Entrez votre age", type: TextInputType.number),
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -124,12 +125,13 @@ class ProfilPageState extends State<ProfilPage> {
     );
   }
 
-  TextField myTextField({ required TextEditingController controller, required String hint, bool isSecret = false}){
+  TextField myTextField({ required TextEditingController controller, required String hint, bool isSecret = false, TextInputType type: TextInputType.text}){
     return TextField(
       controller: controller,
       decoration: InputDecoration(
         hintText: hint,
       ),
+      keyboardType: type,
       obscureText: isSecret,
       onSubmitted: ((newValue) {
         updateUser();
@@ -141,12 +143,12 @@ class ProfilPageState extends State<ProfilPage> {
     setState(() {
       myProfil = Profil(
         surname: (surname.text != myProfil.name) ? surname.text : myProfil.surname, // recupere le text dans la TextField
-        name: (name.text != myProfil.name) ? name.text : myProfil.name,
+        name: name.text,
         secret: secret.text,
         favoriteLang: myProfil.favoriteLang,
         hobbies: myProfil.hobbies,
         height: myProfil.height,
-        age: myProfil.age,
+        age: int.parse(age.text),
         gender: myProfil.gender,
       );
     });
